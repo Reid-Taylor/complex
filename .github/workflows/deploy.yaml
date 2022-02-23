@@ -38,6 +38,21 @@ jobs:
  
       - name: Push Worker to Docker
         run: docker push reidtaylor/multi-worker
+      
+      - name: Generate deployment package
+        run: zip -r deploy.zip ./docker-compose.yml
+ 
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: docker-multi-app
+          environment_name: Dockermultiapp-env
+          existing_bucket_name: elasticbeanstalk-us-east-2-375234172965
+          region: us-east-2
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
 
       - name: logout of Docker for added security
         run: docker logout
