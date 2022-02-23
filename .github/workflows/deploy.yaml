@@ -38,3 +38,6 @@ jobs:
  
       - name: Push Worker to Docker
         run: docker push reidtaylor/multi-worker
+
+      - name: logout of Docker for added security
+        run: docker logout
